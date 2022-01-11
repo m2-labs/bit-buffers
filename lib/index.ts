@@ -1,5 +1,7 @@
+import { deflateSync, inflateSync } from "zlib"
+
 const BITS_PER_BYTE = 8
-const MAX_BITS = Number.MAX_SAFE_INTEGER.toString(2).length
+const DEFAULT_MIN_LENGTH = 16 * 1_024 * BITS_PER_BYTE // 16KB
 const FULL_BYTE = 0b111
 
 /**
@@ -18,15 +20,12 @@ export class BitBuffer {
    * @param lengthOrBuffer the length of the buffer in bits, or an existing
    * buffer to use
    */
-  constructor(lengthOrBuffer: number | Buffer | BitBuffer) {
+  constructor(
+    lengthOrBuffer: number | Buffer | BitBuffer = DEFAULT_MIN_LENGTH
+  ) {
     if (lengthOrBuffer instanceof Buffer) {
       this.buffer = lengthOrBuffer
     } else if (typeof lengthOrBuffer === "number") {
-      if (lengthOrBuffer > MAX_BITS) {
-        throw new RangeError(
-          "Can not create a bit buffer of length greater than 2^53"
-        )
-      }
       this.buffer = Buffer.alloc(Math.ceil(lengthOrBuffer / BITS_PER_BYTE))
     } else {
       throw new TypeError("Invalid type, must be a number or a Buffer")
@@ -34,10 +33,28 @@ export class BitBuffer {
   }
 
   /**
+   * Build a new BitBuffer from a compressed bit string
+   */
+  static fromBitstring(input: string): BitBuffer {
+    const buffer = decompress(input)
+
+    return new BitBuffer(buffer)
+  }
+
+  /**
+   * Built a new BitBuffer from an index array
+   */
+  static fromIndexArray(input: number[], minLength?: number): BitBuffer {
+    return input.reduce((acc, index) => {
+      return acc.set(index)
+    }, new BitBuffer(minLength))
+  }
+
+  /**
    * The length of the bit buffer in bits.
    */
   get length(): number {
-    return this.buffer.length * BITS_PER_BYTE
+    return this.buffer.byteLength * BITS_PER_BYTE
   }
 
   /**
@@ -112,4 +129,50 @@ export class BitBuffer {
   test(offset: number): boolean {
     return this.get(offset) === 1
   }
+
+  /**
+   * Generates a compressed bit string from an array of index values
+   *
+   * @returns a compressed string of bits representing the input array
+   */
+  toBitstring(): string {
+    return compress(this.buffer)
+  }
+
+  /**
+   * Generates an array of indices from the buffer
+   *
+   * @returns an array of indices
+   */
+  toIndexArray(): number[] {
+    const results: number[] = []
+
+    for (let i = 0; i < this.length; i++) {
+      if (this.test(i)) {
+        results.push(i)
+      }
+    }
+
+    return results
+  }
+}
+
+/**
+ * Apply zlib compression with Base64 encoding to a given string or buffer
+ *
+ * @returns a base64 encoded string containing the zlib compressed input
+ */
+function compress(buffer: Buffer): string {
+  const deflated = deflateSync(buffer)
+  return Buffer.from(deflated).toString("base64")
+}
+
+/**
+ * Given the base64 encoded input array, decode and unzip it to a Buffer
+ *
+ * @returns a Buffer containing the decoded base64 encoded string
+ */
+function decompress(input: string): Buffer {
+  const decoded = Buffer.from(input, "base64")
+  return inflateSync(decoded)
 }
