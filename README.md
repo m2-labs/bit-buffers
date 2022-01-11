@@ -1,11 +1,11 @@
-# bit-buffer
+# bit-buffers
 
-A simple bit buffer (bit-string) implementation with base64 zlib compressed bitstring support.
+A simple bit buffer (bit-string) implementation with base64 zlib compressed bitstring support with zero external dependencies.
 
 ## Usage
 
 ```ts
-import { BitBuffer } from "bit-buffer"
+import { BitBuffer } from "bit-buffers"
 
 // BitBuffers are immutable and default to 16kb capacity by default.
 const bits = new BitBuffer()

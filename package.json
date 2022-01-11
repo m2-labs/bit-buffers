@@ -1,5 +1,5 @@
 {
-  "name": "bit-buffer",
+  "name": "bit-buffers",
   "version": "1.0.0",
   "description": "A simple bit buffer (bit-string) implementation with base64 zlib compressed bitstring support.",
   "main": "dist/index.js",
@@ -7,10 +7,10 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/m2-labs/bit-buffer",
+  "homepage": "https://github.com/m2-labs/bit-buffers",
   "repository": {
     "type": "git",
-    "url": "https://github.com/m2-labs/bit-buffer.git"
+    "url": "https://github.com/m2-labs/bit-buffers.git"
   },
   "author": {
     "name": "M2 Labs",
