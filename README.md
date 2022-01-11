@@ -1,6 +1,6 @@
 # bit-buffers
 
-A simple bit buffer (bit-string) implementation with base64 zlib compressed bitstring support with zero external dependencies.
+A simple bit buffer (bit-string) implementation with base64 zlib compressed bitstring support.
 
 ## Usage
 

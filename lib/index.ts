@@ -1,4 +1,5 @@
-import { deflateSync, inflateSync } from "zlib"
+import base64js from "base64-js"
+import { inflate, deflate } from "pako"
 
 const BITS_PER_BYTE = 8
 const DEFAULT_MIN_LENGTH = 16 * 1_024 * BITS_PER_BYTE // 16KB
@@ -162,9 +163,9 @@ export class BitBuffer {
  *
  * @returns a base64 encoded string containing the zlib compressed input
  */
-function compress(buffer: Buffer): string {
-  const deflated = deflateSync(buffer)
-  return Buffer.from(deflated).toString("base64")
+function compress(input: string | Buffer): string {
+  const deflated = deflate(input)
+  return base64js.fromByteArray(deflated)
 }
 
 /**
@@ -173,6 +174,6 @@ function compress(buffer: Buffer): string {
  * @returns a Buffer containing the decoded base64 encoded string
  */
 function decompress(input: string): Buffer {
-  const decoded = Buffer.from(input, "base64")
-  return inflateSync(decoded)
+  const decoded = base64js.toByteArray(input)
+  return Buffer.from(inflate(decoded))
 }

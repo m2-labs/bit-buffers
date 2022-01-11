@@ -12,6 +12,12 @@ const TEST_VECTORS = [
   {
     indexArray: [3], // zero index
     bitstring: "eJztwSEBAAAAAiAn+H+tMyxAAwAAAAAAAAAAAAAAAAAAALwNQDwAEQ=="
+  },
+  {
+    skipGenerate: true, // When I generate a bitstring, I get the string found in the first vector. However, both these values decode to the same empty array.
+    indexArray: [],
+    bitstring:
+      "H4sIAAAAAAAAA-3BMQEAAADCoPVPbQsvoAAAAAAAAAAAAAAAAP4GcwM92tQwAAA="
   }
 ]
 
@@ -200,7 +206,11 @@ test(".fromIndexArray() accepts a size for the array", () => {
 })
 
 test("toBitString() returns a compressed base64 representation of the BitBuffer", () => {
-  TEST_VECTORS.forEach(({ indexArray, bitstring }) => {
+  TEST_VECTORS.forEach(({ indexArray, bitstring, skipGenerate }) => {
+    if (skipGenerate) {
+      return
+    }
+
     const bits = BitBuffer.fromIndexArray(indexArray)
 
     expect(bits.toBitstring()).toEqual(bitstring)
