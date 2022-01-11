@@ -33,14 +33,33 @@ const bits6 = BitBuffer.fromIndexArray(indexArray)
 bits6 === bits5 // => true
 ```
 
-## Getting started
-
-```
-npm run dev
-```
-
 ## Building
 
-```
+```sh
 npm run build
 ```
+
+## Testing
+
+```sh
+npm test
+```
+
+## Linting
+
+```sh
+npm run lint
+```
+
+## Type-checking
+
+```sh
+npm run type-check
+```
+
+## Brought to you by M2 Labs
+
+<img src="https://m2.xyz/github.png" alt="M2 Labs" width="427" height="94" />
+
+This project is maintained and funded by [M2 Labs](https://m2.xyz), a Web3
+product development studio.
