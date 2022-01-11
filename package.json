@@ -1,9 +1,31 @@
 {
   "name": "bit-buffer",
   "version": "1.0.0",
-  "description": "",
+  "description": "An incredibly simple bit buffer (aka bit-string) implementation.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/m2-labs/bit-buffer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/m2-labs/bit-buffer.git"
+  },
+  "author": {
+    "name": "M2 Labs",
+    "url": "https://m2.xyz"
+  },
+  "contributors": [
+    {
+      "name": "Brice Stacey",
+      "email": "brice@m2.xyz"
+    },
+    {
+      "name": "Matt Venables",
+      "email": "matt@m2.xyz"
+    }
+  ],
   "scripts": {
     "build": "npm run clean; swc lib -d dist",
     "build:watch": "swc lib -d dist --watch --quiet",
@@ -11,13 +33,12 @@
     "dev": "run-p build:watch start:dev --silent",
     "format": "prettier  --write .",
     "lint": "eslint . --ext .ts",
+    "prepublish": "npm run build",
     "start": "node dist/index.js",
     "start:dev": "nodemon \"./dist/index.js\" --watch dist --quiet",
     "test": "jest",
     "type-check": "tsc --pretty --noEmit"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "devDependencies": {
     "@swc/cli": "^0.1.55",
